@@ -1,0 +1,2 @@
+prototype: "/components/collections/human.collection"
+load_dynamically: false

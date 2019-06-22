@@ -1,0 +1,285 @@
+images {
+  image: "/assets/game/gfx/acts/act_clone.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_fire.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_jump.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_pause.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_push.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_stop.png"
+}
+images {
+  image: "/assets/game/gfx/play_btn.png"
+}
+images {
+  image: "/assets/game/gfx/pop.png"
+}
+images {
+  image: "/assets/game/gfx/replay_btn.png"
+}
+images {
+  image: "/assets/game/gfx/man/man_idle.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/button.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/teleportert.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/robot.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_left.png"
+}
+images {
+  image: "/assets/game/gfx/acts/act_right.png"
+}
+animations {
+  id: "man_walk"
+  images {
+    image: "/assets/game/gfx/man/man_walk1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_walk2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_walk3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_walk4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_walk5.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 14
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_draw"
+  images {
+    image: "/assets/game/gfx/man/man_draw1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_gun.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_jump_start"
+  images {
+    image: "/assets/game/gfx/man/man_jump_start1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_start2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_start3.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_jump_air"
+  images {
+    image: "/assets/game/gfx/man/man_jump_air1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_air2.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_jump_ground"
+  images {
+    image: "/assets/game/gfx/man/man_jump_ground1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_ground2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_ground3.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "sign"
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign2.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign3.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign4.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign5.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign6.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  images {
+    image: "/assets/game/gfx/sign/sign1.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 18
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_push"
+  images {
+    image: "/assets/game/gfx/man/man_push1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_push2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_push3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_push4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_push5.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 16
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_teleport_out"
+  images {
+    image: "/assets/game/gfx/man/man_teleport1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport6.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport7.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport8.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport9.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_teleport_in"
+  images {
+    image: "/assets/game/gfx/man/man_teleport1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport6.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport7.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport8.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport9.png"
+  }
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+margin: 0
+extrude_borders: 2
+inner_padding: 0
