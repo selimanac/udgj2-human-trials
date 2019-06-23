@@ -1,6 +1,6 @@
 tile_set: "/assets/game/tiles/game.tilesource"
 layers {
-  id: "Tile Layer 1"
+  id: "walls"
   z: 0.0
   is_visible: 1
   cell {
@@ -411,13 +411,41 @@ layers {
   }
 }
 layers {
-  id: "Tile Layer 2"
+  id: "objects"
   z: 0.0
   is_visible: 1
   cell {
     x: 4
     y: 3
     tile: 3
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 5
+    y: 3
+    tile: 7
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 6
+    y: 3
+    tile: 11
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 8
+    y: 3
+    tile: 12
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 0
+    y: 5
+    tile: 12
     h_flip: 0
     v_flip: 0
   }

@@ -1,30 +1,46 @@
+local gs = require("scripts.general.game_state")
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+
 function init(self)
-	profiler.enable_ui(false)
-	msg.post("@system:", "toggle_physics_debug")
-	msg.post("@render:", "clear_color", {color=vmath.vector4(1, 1, 1, 0)})
+	msg.post("@render:", "clear_color", {color = vmath.vector4(1, 1, 1, 0)})
+
+	-- Init game state
+	gs:init()
+
+	-- Set initial launch
+	gs.fsm:launch()
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+local function enable_scene(scene_url)
+	msg.post(msg.url(scene_url), "init")
+	msg.post(msg.url(scene_url), "enable")
 end
 
-function update(self, dt)
-	-- Add update code here
-	-- Remove this function if not needed
+local function unload_scene(scene)
+	msg.post(scene, "disable")
+	msg.post(scene, "final")
+	msg.post(scene, "unload")
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Remove this function if not needed
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Remove this function if not needed
+	-- Load Scene
+	if message_id == h.LOAD_PROXY then
+		msg.post(message.scene, message.type)
+	elseif message_id == h.PROXY_LOADED then
+		if sender == msg.url(s.scenes.LoadingProxy) then
+			enable_scene(sender)
+		elseif sender == msg.url(s.scenes.GameProxy) then
+			--msg.post(sender, "init")
+			self.gamescene = sender
+			enable_scene(sender)
+		end
+	elseif message_id == h.UNLOAD_PROXY then
+		unload_scene(message.scene)
+	elseif message_id == h.PROXY_UNLOADED then
+		print("PROXY_UNLOADED")
+		if sender == msg.url(s.scenes.LoadingProxy) then
+			gs.fsm:play()
+		end
+	end
 end

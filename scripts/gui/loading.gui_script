@@ -1,0 +1,42 @@
+local gs = require("scripts.general.game_state")
+local s = require("scripts.general.settings")
+local h = require("scripts.general.hashes")
+
+local function unload_scene()
+	msg.post(s.proxy, "unload_proxy", {scene = s.scenes.LoadingProxy})
+end
+
+local function loading_transition(self)
+	gui.animate(self.logo_node, "position.y", s.display_height + 30, gui.EASING_INCIRC, 0.5, 0, nil, gui.PLAYBACK_ONCE_BACKWARD)
+	gui.animate(self.human_node, "color.w", 0, gui.EASING_LINEAR, 0.4, 0, nil, gui.PLAYBACK_ONCE_BACKWARD)
+end
+
+local function game_transition(self)
+	gui.animate(self.logo_node, "position.y", s.display_height + 30, gui.EASING_OUTCIRC, 0.5, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+	gui.animate(self.human_node, "color.w", 0, gui.EASING_LINEAR, 0.3, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+	gui.animate(self.box_node, "position.y", s.display_height + (s.display_height / 2), gui.EASING_OUTCIRC, 0.5, 0.2, unload_scene, gui.PLAYBACK_ONCE_FORWARD)
+end
+
+function init(self)
+	gui.set_render_order(1)
+	-- Start loading game
+	gs.fsm:load()
+
+	self.logo_node = gui.get_node("logo")
+	self.human_node = gui.get_node("human")
+	self.box_node = gui.get_node("box")
+
+	loading_transition(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == h.GAME_TRANSITION then
+		timer.delay(
+			1.0,
+			false,
+			function()
+				game_transition(self)
+			end
+		)
+	end
+end

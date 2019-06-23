@@ -1,0 +1,34 @@
+local s = require("scripts.general.settings")
+
+function init(self)
+	print("GameLoaded- DO YOUR JOB")
+	-- When ini done
+	if s.is_debug == false then
+	msg.post(s.scenes.Loading, "game_transition")
+	end
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

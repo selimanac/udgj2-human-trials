@@ -1,0 +1,41 @@
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+local v = require("scripts.general.vars")
+local camera = require "orthographic.camera"
+
+function init(self)
+	-- Add initialization code here
+	-- Remove this function if not needed
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	if v.GAME_PAUSED == false then
+		return
+	end
+	local a = camera.screen_to_world(h.CAMERA, v.POINTER_POS)
+	go.set_position(a, ".")
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+	pprint(message)
+	if message.other_group == h.C_SIGN then
+		pprint(message.other_id)
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

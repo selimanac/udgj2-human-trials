@@ -4,7 +4,7 @@ dependencies = https://github.com/britzl/defold-orthographic/archive/master.zip
 version = 0.1
 
 [bootstrap]
-main_collection = /components/scenes/test.collectionc
+main_collection = /scenes/test.collectionc
 render = /orthographic/render/orthographic.renderc
 
 [input]

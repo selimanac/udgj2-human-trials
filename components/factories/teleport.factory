@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/teleport.go"
+load_dynamically: false
