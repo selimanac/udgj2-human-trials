@@ -1,6 +1,11 @@
-components {
-  id: "pointer"
-  component: "/scripts/gameobjects/pointer.script"
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "tile_set: \"/assets/game/atlas/human.atlas\"\n"
+  "default_animation: \"button\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
   position {
     x: 0.0
     y: 0.0
@@ -14,15 +19,15 @@ components {
   }
 }
 embedded_components {
-  id: "collisionobject"
+  id: "button"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.0\n"
   "restitution: 0.0\n"
-  "group: \"pointer\"\n"
-  "mask: \"sign\"\n"
+  "group: \"act\"\n"
+  "mask: \"human\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -41,7 +46,7 @@ embedded_components {
   "    count: 3\n"
   "  }\n"
   "  data: 5.0\n"
-  "  data: 5.0\n"
+  "  data: 7.5\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"

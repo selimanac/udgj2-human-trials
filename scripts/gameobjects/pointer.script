@@ -22,9 +22,8 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Remove this function if not needed
-	pprint(message)
+
+
 	if message.other_group == h.C_SIGN then
 		pprint(message.other_id)
 	end

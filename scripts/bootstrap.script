@@ -38,7 +38,6 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == h.UNLOAD_PROXY then
 		unload_scene(message.scene)
 	elseif message_id == h.PROXY_UNLOADED then
-		print("PROXY_UNLOADED")
 		if sender == msg.url(s.scenes.LoadingProxy) then
 			gs.fsm:play()
 		end

@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/button.go"
+load_dynamically: false

@@ -144,13 +144,6 @@ layers {
     v_flip: 0
   }
   cell {
-    x: 0
-    y: 4
-    tile: 1
-    h_flip: 0
-    v_flip: 0
-  }
-  cell {
     x: 1
     y: 4
     tile: 1
@@ -228,23 +221,9 @@ layers {
     v_flip: 0
   }
   cell {
-    x: 0
-    y: 5
-    tile: 4
-    h_flip: 0
-    v_flip: 0
-  }
-  cell {
     x: 11
     y: 5
     tile: 6
-    h_flip: 0
-    v_flip: 0
-  }
-  cell {
-    x: 0
-    y: 6
-    tile: 0
     h_flip: 0
     v_flip: 0
   }
@@ -413,9 +392,16 @@ layers {
 layers {
   id: "objects"
   z: 0.0
-  is_visible: 1
+  is_visible: 0
   cell {
-    x: 4
+    x: 0
+    y: 0
+    tile: 15
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 3
     y: 3
     tile: 3
     h_flip: 0
@@ -443,7 +429,42 @@ layers {
     v_flip: 0
   }
   cell {
-    x: 0
+    x: 1
+    y: 5
+    tile: 7
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 2
+    y: 5
+    tile: 12
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 4
+    y: 5
+    tile: 7
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 5
+    y: 5
+    tile: 14
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 7
+    y: 5
+    tile: 13
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 11
     y: 5
     tile: 12
     h_flip: 0

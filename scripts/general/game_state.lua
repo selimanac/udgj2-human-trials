@@ -23,6 +23,7 @@ end
 
 local function on_game_gameplay()
     print("on_game_gameplay")
+    msg.post(s.scenes.GameProxy, "acquire_input_focus")
     v.GAME_PAUSED = false
 end
 

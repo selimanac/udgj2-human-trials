@@ -43,6 +43,9 @@ images {
 images {
   image: "/assets/game/gfx/acts/act_right.png"
 }
+images {
+  image: "/assets/game/gfx/game/elements/block.png"
+}
 animations {
   id: "man_walk"
   images {
