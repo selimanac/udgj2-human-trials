@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/bullet.go"
+load_dynamically: false

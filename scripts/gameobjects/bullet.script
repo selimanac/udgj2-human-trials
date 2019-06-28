@@ -1,0 +1,43 @@
+local s = require("scripts.general.settings")
+local h = require("scripts.general.hashes")
+local v = require("scripts.general.vars")
+
+go.property("direction", 1)
+
+local set_position = go.set_position
+
+function init(self)
+	self.pos = go.get_position(".")
+	self.pos_x = self.pos.x
+	if self.direction == -1 then
+		sprite.set_hflip("#sprite", true)
+	end
+end
+
+function update(self, dt)
+	if v.GAME_PAUSED  then
+        return
+	end
+	
+	self.pos_x = self.pos_x + ((v.BULLET_SPEED * dt) * self.direction)
+	self.pos.x = self.pos_x
+	set_position(self.pos, ".")
+
+	if self.pos_x < -230 or self.pos_x > 230 then
+		go.delete(".")
+	end
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_WALL then
+		-- print("Hit wall")
+		go.delete(".")
+	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_ACT then
+		-- print("Hit ACT")
+		go.delete(".")
+	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
+		-- print("Hit HUMAN")
+		go.delete(".")
+	end
+end

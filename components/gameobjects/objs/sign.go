@@ -14,7 +14,7 @@ components {
   }
 }
 embedded_components {
-  id: "sprite"
+  id: "body_sprite"
   type: "sprite"
   data: "tile_set: \"/assets/game/atlas/human.atlas\"\n"
   "default_animation: \"sign\"\n"

@@ -1,3 +1,51 @@
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+local utils = require("scripts.libs.utils")
+
+local function set_act(self, id)
+	self.act_id = id
+	sprite.play_flipbook(self.act_sprite, s.acts[self.act_id].anim)
+	msg.post(self.act_sprite, "enable")
+	self.is_set = true
+end
+
+local function hide_act(self)
+	go.set(self.act_sprite, "tint.w", 1)
+	msg.post(self.act_sprite, "disable")
+end
+
+local function remove_act(self)
+	self.act_id = 0
+	sprite.play_flipbook(self.body_sprite, self.jump)
+	go.animate(self.act_sprite, "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.3, 0, hide_act)
+	self.is_set = false
+end
+
 function init(self)
-	msg.post("#act", "disable")
+	self.idle = hash("sign_idle")
+	self.jump = hash("sign")
+	self.act_sprite = "#act"
+	self.body_sprite = "#body_sprite"
+	self.act_id = 0
+	self.is_set = false
+	self.human_url = msg.url()
+
+	msg.post(self.act_sprite, "disable")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == h.TRIGGER and message.enter == true and message.other_group == h.C_POINTER then
+		sprite.play_flipbook(self.body_sprite, self.idle)
+	elseif message_id == h.TRIGGER and message.other_group == h.C_POINTER and message.enter == false and self.is_set == false then
+		sprite.play_flipbook(self.body_sprite, self.jump)
+	elseif message_id == h.TRIGGER and message.other_group == h.C_HUMAN and self.is_set then
+		self.human_url = utils:human_url(message.other_id)
+		msg.post(self.human_url, s.acts[self.act_id].job, {act = self.act_id})
+		remove_act(self)
+	end
+	if message_id == h.ADD_ACT then
+		set_act(self, message.act_id)
+	--	p-- print(message.act_id)
+		msg.post(s.scenes.GameGUI, "decerease_act", {id = message.act_id})
+	end
 end

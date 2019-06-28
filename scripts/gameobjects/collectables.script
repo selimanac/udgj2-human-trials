@@ -1,0 +1,52 @@
+local s = require("scripts.general.settings")
+local h = require("scripts.general.hashes")
+local v = require("scripts.general.vars")
+
+go.property("obj_id", 0)
+go.property("id", 0)
+
+local function complete( self )
+	
+	go.delete(".")
+end
+
+local function collect()
+	go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.2, 0, complete)
+end
+
+
+
+function init(self)
+	-- print("obj_id: ", self.obj_id)
+	-- print("self.id: ", self.id)
+	for i = 1, s.act_count do
+		if s.acts[i].id == self.obj_id then
+			sprite.play_flipbook("#sprite", s.acts[i].anim)
+		end
+	end
+	self.pos = go.get_position(".")
+	go.animate(".", "position.y", go.PLAYBACK_LOOP_PINGPONG, self.pos.y + 5, go.EASING_INBOUNCE, 1, 0.2, on_complete)
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
+		-- print("COLLECT")
+		msg.post(s.scenes.GameGUI, "collect_act", {id = self.obj_id})
+		collect()
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

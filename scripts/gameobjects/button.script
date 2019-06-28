@@ -1,0 +1,25 @@
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+local utils = require("scripts.libs.utils")
+
+
+go.property("is_active", 0)
+go.property("id", 0)
+
+
+function on_message(self, message_id, message, sender)
+	if self.is_active == 1 then
+		return
+	end
+
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN and self.is_active == 0 then
+		self.human_url = utils:human_url(message.other_id)
+		msg.post(self.human_url, "human_play", {act = s.act.PUSH})
+	end
+
+	if message_id == h.ACT_ACTIVE then
+		self.is_active = 1
+		sprite.play_flipbook("#sprite", hash("button_on"))
+		utils:kick_links(self.id)
+	end
+end

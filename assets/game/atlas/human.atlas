@@ -35,9 +35,6 @@ images {
   image: "/assets/game/gfx/game/elements/teleportert.png"
 }
 images {
-  image: "/assets/game/gfx/game/elements/robot.png"
-}
-images {
   image: "/assets/game/gfx/acts/act_left.png"
 }
 images {
@@ -45,6 +42,33 @@ images {
 }
 images {
   image: "/assets/game/gfx/game/elements/block.png"
+}
+images {
+  image: "/assets/game/gfx/man/man_teleport_idle.png"
+}
+images {
+  image: "/assets/game/gfx/sign/sign_idle.png"
+}
+images {
+  image: "/assets/game/gfx/pause_btn.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/button_off.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/button_on.png"
+}
+images {
+  image: "/assets/game/gfx/bullet.png"
+}
+images {
+  image: "/assets/game/gfx/game/elements/robot/robot_bullet.png"
+}
+images {
+  image: "/assets/game/gfx/speed_btn.png"
+}
+images {
+  image: "/assets/game/gfx/speedx2_btn.png"
 }
 animations {
   id: "man_walk"
@@ -88,8 +112,11 @@ animations {
   images {
     image: "/assets/game/gfx/man/man_gun.png"
   }
+  images {
+    image: "/assets/game/gfx/man/man_gun.png"
+  }
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
+  fps: 14
   flip_horizontal: 0
   flip_vertical: 0
 }
@@ -210,7 +237,7 @@ animations {
   images {
     image: "/assets/game/gfx/man/man_push5.png"
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 16
   flip_horizontal: 0
   flip_vertical: 0
@@ -252,33 +279,196 @@ animations {
 animations {
   id: "man_teleport_in"
   images {
-    image: "/assets/game/gfx/man/man_teleport1.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport2.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport3.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport4.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport5.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport6.png"
-  }
-  images {
-    image: "/assets/game/gfx/man/man_teleport7.png"
+    image: "/assets/game/gfx/man/man_teleport9.png"
   }
   images {
     image: "/assets/game/gfx/man/man_teleport8.png"
   }
   images {
-    image: "/assets/game/gfx/man/man_teleport9.png"
+    image: "/assets/game/gfx/man/man_teleport7.png"
   }
-  playback: PLAYBACK_ONCE_BACKWARD
+  images {
+    image: "/assets/game/gfx/man/man_teleport6.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_teleport1.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_fall_start"
+  images {
+    image: "/assets/game/gfx/man/man_jump_start1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_start2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_start3.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_fall_air"
+  images {
+    image: "/assets/game/gfx/man/man_jump_air1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_jump_air2.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_draw_back"
+  images {
+    image: "/assets/game/gfx/man/man_gun.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_gun.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_gun.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_draw1.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 14
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "robot"
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot1.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot2.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot3.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_die"
+  images {
+    image: "/assets/game/gfx/man/man_die1.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die6.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die7.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die8.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "robot_die"
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot_die1.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot_die2.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot_die3.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot_die4.png"
+  }
+  images {
+    image: "/assets/game/gfx/game/elements/robot/robot_die5.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 14
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "man_clone"
+  images {
+    image: "/assets/game/gfx/man/man_die8.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die7.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die6.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die5.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die4.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die3.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die2.png"
+  }
+  images {
+    image: "/assets/game/gfx/man/man_die1.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0

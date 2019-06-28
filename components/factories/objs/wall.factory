@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/wall.go"
+load_dynamically: false

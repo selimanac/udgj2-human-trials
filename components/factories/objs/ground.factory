@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/ground.go"
+load_dynamically: false

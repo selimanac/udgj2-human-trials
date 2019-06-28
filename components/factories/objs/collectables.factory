@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/collectables.go"
+load_dynamically: false

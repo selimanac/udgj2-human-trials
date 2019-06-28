@@ -1,14 +1,41 @@
+go.property("initial_direction", 1)
+go.property("id", 0)
+go.property("is_clone", 0)
+
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
 local machine = require("scripts.gameobjects.helpers.human_manager")
-
-local function draw_line(from, to)
-    msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = vmath.vector4(1,0,0,1) })
-end
-
+local v = require("scripts.general.vars")
 
 function init(self)
-	self.human_pos = go.get_position("human")
-	self.to = vmath.vector3() 
-	--go.set_rotation(vmath.quat_rotation_y(math.rad(180)),"container")
+	self.msg_sender = nil
+	self.msg_act = 0
+	self.queue = {}
+	self.human_pos_x = 0
+	self.human_pos_y = 0
+	self.direction = 0
+	self.raycast_to = vmath.vector3(0, 0, 0)
+	self.raycats_x = 1
+	self.is_falling = false
+
+	self.queue_id = 0
+
+	msg.post("#c_left", "disable")
+	msg.post("#c_right", "enable")
+
+	machine:init(self, self.initial_direction)
+	-- print("initial_direction", self.initial_direction)
+
+	--	self.fsm:idle()
+	--self.fsm:fall({self = self})
+
+	if self.is_clone == 1 then
+		-- print("INIT CLONE")
+		machine:init_clone(self)
+	end
+
+	-- print("HUMAN ID")
+---	p-- print(self.id)
 end
 
 function final(self)
@@ -17,40 +44,74 @@ function final(self)
 end
 
 function update(self, dt)
-
-	
-	-- Add update code here
-	-- Remove this function if not needed
-	go.set_position(vmath.vector3(self.human_pos.x+1, self.human_pos.y, self.human_pos.z), "human")
-	self.human_pos = go.get_position("human")
-
-	local from = go.get_position()
-    local to =from +50
-    local result = physics.raycast(from, to, { hash("stone") }) 
-    if result then
-        draw_line(from, result.position) 
-    else
-        draw_line(from, to) 
-    end
+	human:update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	pprint(message)
-	if message_id == hash("trigger_response") then
-        if message.enter then
-         
-        else
-            -- take action for exit
-        end
-    end
-end
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_WALL then
+		machine:turn(self)
+	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_BULLET then
+		-- print("DIE human")
+		self.fsm:die({self = self})
+	end
 
-function on_input(self, action_id, action)
-	-- Add input-handling code here
-	-- Remove this function if not needed
-end
+	if message_id == h.RAY_CAST_MISSED and self.fsm.current ~= "falling" then
+		self.fsm:fall({self = self})
+	end
 
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Remove this function if not needed
+	if message_id == h.RAY_CAST_RESPONSE and self.is_falling then
+		self.is_falling = false
+		self.fsm:die({self = self})
+	end
+
+	if message_id == h.HUMAN_PLAY then
+		if message.act == nil then
+			self.fsm:walk()
+		elseif message.act == s.act.PUSH then
+			if human:check_queue(self, message.act) then
+				self.fsm:push({self = self, sender = sender, act = message.act})
+			end
+		elseif message.act == s.act.JUMP then
+			self.fsm:jump({self = self})
+		elseif message.act == "TELEPORT" then
+			self.fsm:teleport({self = self, sender = sender, act = message.act, targets = message.targets})
+		elseif message.act == "TELEPORT_IN" then
+			self.fsm:teleport({self = self, sender = sender, act = message.act, targets = message.targets})
+		elseif message.act == "BLOCK" then
+			if human:check_queue(self, nil) then
+				human:dispatch_queue(self)
+			end
+		elseif message.act == s.act.PAUSE then
+			self.fsm:pause()
+		elseif message.act == s.act.CLONE then
+			-- print("INCLONE")
+			self.fsm:clone({self = self})
+		elseif message.act == s.act.FIRE then
+			self.fsm:fire()
+		elseif message.act == s.act.LEFT then
+			if machine:get_direction(self) ~= s.direction.LEFT then
+				self.fsm:turn({self = self, dir = s.direction.LEFT})
+			end
+		elseif message.act == s.act.RIGHT then
+			if machine:get_direction(self) ~= s.direction.RIGHT then
+				self.fsm:turn({self = self, dir = s.direction.RIGHT})
+			end
+		end
+	elseif message_id == h.HUMAN_QUEUE then
+		human:add_to_queue(self, message.act)
+	elseif message_id == h.REMOVE_HUMAN then
+		-- TODO
+		-- False yanlış
+		-- Clone ise silinecek. Clone değil ise check point
+		if self.is_clone == 0 then
+		--[[ 	for i = 1, #v.LEVEL_OBJECTS do
+				if v.LEVEL_OBJECTS[i].id == self.id then
+					table.remove(v.LEVEL_OBJECTS, i)
+					break
+				end
+			end ]]
+
+			go.delete(".")
+		end
+	end
 end
