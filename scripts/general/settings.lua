@@ -1,7 +1,8 @@
 local setting = {}
 
 -- DEV
-setting.is_dev = true
+setting.is_dev = false
+setting.is_music = false
 setting.is_debug = false
 setting.is_debug_physic = false
 
@@ -31,43 +32,43 @@ setting.act = {
 -- Acts
 setting.acts = {
   {
-    id = 15,
+    id = 21,
     name = "PUSH",
     anim = hash("act_push"),
     job = "human_queue"
   },
   {
-    id = 21,
+    id = 33,
     name = "JUMP",
     anim = hash("act_jump"),
     job = "human_queue"
   },
   {
-    id = 20,
+    id = 29,
     name = "PAUSE",
     anim = hash("act_pause"),
     job = "human_queue"
   },
   {
-    id = 23,
+    id = 35,
     name = "CLONE",
     anim = hash("act_clone"),
     job = "human_play"
   },
   {
-    id = 22,
+    id = 34,
     name = "FIRE",
     anim = hash("act_fire"),
     job = "human_queue"
   },
   {
-    id = 19,
+    id = 28,
     name = "LEFT",
     anim = hash("act_left"),
     job = "human_play"
   },
   {
-    id = 10,
+    id = 13,
     name = "RIGHT",
     anim = hash("act_right"),
     job = "human_play"
@@ -90,7 +91,10 @@ setting.objects = {
   "ACT-LEFT", --19
   "ACT-CLONE", --23
   "ACT-FIRE", --22
-  "ACT-JUMP" --21
+  "ACT-JUMP", --21,
+  "MINE", --21
+  "FENCE",
+  "COMPUTER"
 }
 
 setting.tile_objects = {
@@ -101,81 +105,110 @@ setting.tile_objects = {
     factory_type = 2
   },
   {
-    id = 9,
+    id = 12,
     factory = "/factories#sign",
     offset = vmath.vector3(0, 4, 0.1),
     factory_type = 1
   },
   {
-    id = 14,
+    id = 20,
     factory = "/factories#button",
     offset = vmath.vector3(0, 10, 0.1),
     factory_type = 1
   },
   {
-    id = 16,
+    id = 25,
     factory = "/factories#teleport",
     offset = vmath.vector3(0, 0, 0.1),
     factory_type = 1
   },
   {
-    id = 17,
+    id = 26,
     factory = "/factories#bot",
     offset = vmath.vector3(0, 5, 0.11),
     factory_type = 1
   },
   {
-    id = 18,
+    id = 27,
     factory = "/factories#block",
     offset = vmath.vector3(0, 12, 0.1),
     factory_type = 1
   },
   {
+    -- "ACT-STOP"
     id = 5,
     factory = "/factories#collectables",
     offset = vmath.vector3(0, 10, 0.1),
     factory_type = 1
   },
   {
-    id = 10,
+    --"ACT-RIGHT"
+    id = 13,
     factory = "/factories#collectables",
     offset = vmath.vector3(0, 10, 0.1),
     factory_type = 1
   },
   {
-    id = 15,
-    factory = "/factories#collectables",
-    offset = vmath.vector3(0, 10, 0.1),
-    factory_type = 1
-  },
-  {
-    id = 20,
-    factory = "/factories#collectables",
-    offset = vmath.vector3(0, 10, 0.1),
-    factory_type = 1
-  },
-  {
-    id = 19,
-    factory = "/factories#collectables",
-    offset = vmath.vector3(0, 10, 0.1),
-    factory_type = 1
-  },
-  {
-    id = 23,
-    factory = "/factories#collectables",
-    offset = vmath.vector3(0, 10, 0.1),
-    factory_type = 1
-  },
-  {
-    id = 22,
-    factory = "/factories#collectables",
-    offset = vmath.vector3(0, 10, 0.1),
-    factory_type = 1
-  },
-  {
+    -- "ACT-PUSH"
     id = 21,
     factory = "/factories#collectables",
     offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    -- "ACT-PAUSE"
+    id = 29,
+    factory = "/factories#collectables",
+    offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    --  "ACT-LEFT"
+    id = 28,
+    factory = "/factories#collectables",
+    offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    -- "ACT-CLONE"
+    id = 35,
+    factory = "/factories#collectables",
+    offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    -- "ACT-FIRE"
+    id = 34,
+    factory = "/factories#collectables",
+    offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    -- "ACT-JUMP"
+    id = 33,
+    factory = "/factories#collectables",
+    offset = vmath.vector3(0, 10, 0.1),
+    factory_type = 1
+  },
+  {
+    -- MINE
+    id = 6,
+    factory = "/factories#mine",
+    offset = vmath.vector3(0, 0, 0.1),
+    factory_type = 1
+  },
+  {
+    -- FENCE
+    id = 14,
+    factory = "/factories#fence",
+    offset = vmath.vector3(0, 0, 0.1),
+    factory_type = 1
+  },
+  {
+    -- FENCE
+    id = 36,
+    factory = "/factories#computer",
+    offset = vmath.vector3(0, 0, 0.1),
     factory_type = 1
   }
 }
@@ -191,13 +224,13 @@ setting.walls = {
 
 setting.tile_walls = {
   {
-    id = 6,
+    id = 9,
     factory = "/factories#wall",
     offset = vmath.vector3(14, 0, 0.1),
     factory_type = 1
   },
   {
-    id = 8,
+    id = 11,
     factory = "/factories#wall",
     offset = vmath.vector3(-14, 0, 0.1),
     factory_type = 1
@@ -236,6 +269,5 @@ setting.direction = {
   LEFT = -1,
   RIGHT = 1
 }
---[[ setting.left = vmath.quat_rotation_y(math.rad(180))
-setting.right = vmath.quat_rotation_y(math.rad(0)) ]]
+setting.game_music = 0
 return setting

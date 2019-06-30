@@ -1,0 +1,27 @@
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+local utils = require("scripts.libs.utils")
+
+function init(self)
+	-- Add initialization code here
+	-- Remove this function if not needed
+end
+
+local function callback(self)
+	msg.post(self.human_url, "the_end")
+	print("the endE")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
+		print("Human enter")
+		self.human_url = utils:human_url(message.other_id)
+		msg.post(self.human_url, "human_play", {act = s.act.PUSH})
+	end
+
+	if message_id == h.ACT_ACTIVE then
+		print("ACT_ACTIVE")
+		sprite.play_flipbook("#sprite", hash("computer14"))
+		timer.delay(3, false, callback)
+	end
+end

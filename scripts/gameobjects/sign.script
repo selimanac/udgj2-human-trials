@@ -1,17 +1,20 @@
 local h = require("scripts.general.hashes")
 local s = require("scripts.general.settings")
 local utils = require("scripts.libs.utils")
+local audio = require("scripts.general.audio")
 
 local function set_act(self, id)
 	self.act_id = id
 	sprite.play_flipbook(self.act_sprite, s.acts[self.act_id].anim)
 	msg.post(self.act_sprite, "enable")
 	self.is_set = true
+	audio:play("human_add")
 end
 
 local function hide_act(self)
 	go.set(self.act_sprite, "tint.w", 1)
 	msg.post(self.act_sprite, "disable")
+	audio:play("act_pick")
 end
 
 local function remove_act(self)

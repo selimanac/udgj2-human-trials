@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/computer.go"
+load_dynamically: false

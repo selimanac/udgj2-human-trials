@@ -11,6 +11,11 @@ function utils:human_url(id)
     return human_url
 end
 
+function utils:unrequire(m)
+	package.loaded[m] = nil
+	_G[m] = nil
+end
+
 function utils:kick_links(id)
     local temp_links = v.LEVEL_OBJECTS[id].links.to
     

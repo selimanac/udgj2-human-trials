@@ -2,6 +2,7 @@ local s = require("scripts.general.settings")
 local v = require("scripts.general.vars")
 local h = require("scripts.general.hashes")
 local gs = require("scripts.general.game_state")
+local audio = require("scripts.general.audio")
 
 manager = {}
 
@@ -19,12 +20,90 @@ local layer_move = hash("move")
 local layer_gfx = hash("gfx")
 local is_speedup = false
 
+local ai_container_node = nil
+local ai_head_node = nil
+local ai_txt_node = nil
+local ai_container_start_pos = vmath.vector3()
+local ai_container_size = vmath.vector3()
+local ai_container_scale = vmath.vector3()
+local ai_out_pos = vmath.vector3()
+local ai_text = {
+    "BEGIN YOUR TRIAL HUMAN.",
+    "IMPRESSIVE, HUMAN.",
+    "YOU ARE A SMART ONE.\nTHIS IS JUST A BEGINNING",
+    "WHERE ARE YOU GOING HUMAN.\nYOU ARE GOING TO DIE!",
+    "YOUR TIME IS OVER HUMAN.\nYOUR KIND IS JUST A SLAVE",
+    "01000110 01010101 01000011 0100101\nWHAT IS THAT!",
+    "ANOMALY DETECTED!\nYOU WILL PAY, HUMAN",
+    "I AM GOING TO CRUSH YOU HUMAN.",
+    "01000110 01010101 01000011 0100101\nYOUR END IS NEAR",
+    "-. --- / -. --- / -. ---\n "
+}
+
+local function ai_head_out_complete(self)
+    gui.play_flipbook(ai_head_node, hash("ai_in1"))
+    gui.animate(ai_container_node, "position.y", ai_out_pos.y, gui.EASING_OUTCIRC, 0.4, 0)
+end
+
+local function ai_head_remove()
+    audio:stop("ai_speak")
+    gui.animate(ai_txt_node, "color.w", 0, gui.EASING_OUTCIRC, 0.3, 0)
+    audio:play("ai_out", 0.5)
+    gui.play_flipbook(ai_head_node, hash("ai_out"), ai_head_out_complete)
+end
+
+local function ai_text_in_complete(self)
+    timer.delay(4, false, ai_head_remove)
+    gui.play_flipbook(ai_head_node, hash("ai_talk"))
+end
+
+local function ai_head_in_complete(self)
+    audio:play("ai_speak", 0.5)
+    gui.set_text(ai_txt_node, ai_text[v.CURRENT_LEVEL])
+    gui.animate(ai_txt_node, "color.w", 1, gui.EASING_OUTCIRC, 0.3, 0, ai_text_in_complete)
+end
+
+local function ai_in_complete(self)
+    audio:play("ai_in", 0.5)
+    gui.play_flipbook(ai_head_node, hash("ai_in"), ai_head_in_complete)
+end
+
+function manager:init_anim(self)
+    gui.animate(ai_container_node, "position.y", ai_container_start_pos.y, gui.EASING_OUTCIRC, 0.4, 0, ai_in_complete)
+end
+
 function manager:reset()
-    curent_act = {}
+    acts = {}
+    pop_node = nil
+    pop_text_node = nil
+    play_btn = nil
+    speed_btn = nil
+    pop_position = vmath.vector3()
     current_pop = 0
+    start_drag = false
+    curent_act = {}
+    action_pos = vmath.vector3(0, 0, 0)
+    layer_move = hash("move")
+    layer_gfx = hash("gfx")
+    is_speedup = false
+
+    ai_container_node = nil
+    ai_head_node = nil
+    ai_txt_node = nil
+    ai_container_start_pos = vmath.vector3()
+    ai_container_size = vmath.vector3()
+    ai_container_scale = vmath.vector3()
+    ai_out_pos = vmath.vector3()
 end
 
 local function toggle_speed()
+    for i = 1, #v.LEVEL_OBJECTS do
+        if v.LEVEL_OBJECTS[i].object_id == 4 then
+           -- pprint(v.LEVEL_OBJECTS[i].tile_go.url)
+            msg.post(v.LEVEL_OBJECTS[i].tile_go.url, "toggle_walk_sound")
+        end
+    end
+
     if is_speedup then
         s.speedup = 1
         gui.play_flipbook(speed_btn, hash("speedx2_btn"))
@@ -71,7 +150,7 @@ local function enter_act_btn(act)
     current_pop = act.id
 
     local pos = vmath.vector3(act.screen_pos.x, pop_position.y, pop_position.z)
-
+    
     gui.set_position(pop_node, pos)
     gui.set_text(pop_text_node, s.acts[act.id].name)
 
@@ -85,25 +164,24 @@ local function pick_check(node, x, y)
 end
 
 function manager:decerease(id)
-
     id = s.acts[id].id
-    for i=1,#acts do
+    for i = 1, #acts do
         if acts[i].act_id == id then
-            acts[i].count = acts[i].count-1
+            acts[i].count = acts[i].count - 1
             gui.set_text(acts[i].count_txt, acts[i].count)
         end
     end
 end
 
 function manager:collect(id)
-    for i=1,#acts do
+    for i = 1, #acts do
         if acts[i].act_id == id then
-            acts[i].count = acts[i].count+1
+            acts[i].count = acts[i].count + 1
             gui.set_text(acts[i].count_txt, acts[i].count)
         end
     end
 
---[[     for i=1,s.act_count do
+    --[[     for i=1,s.act_count do
         if s.acts[i].id == id then
             -- p-- print(s.acts[i])
             s.acts[i].count = s.acts[i].count+1
@@ -112,8 +190,6 @@ function manager:collect(id)
         end
     end ]]
 end
-
-
 
 function manager:init()
     pop_node = gui.get_node("pop")
@@ -124,6 +200,17 @@ function manager:init()
     replay_btn = gui.get_node("replay_btn")
     speed_btn = gui.get_node("speed_btn")
     toogle_pop(false)
+
+    ai_container_node = gui.get_node("ai_container")
+    ai_head_node = gui.get_node("ai_head")
+    ai_txt_node = gui.get_node("ai_txt")
+    ai_container_start_pos = gui.get_position(ai_container_node)
+    ai_container_size = gui.get_size(ai_container_node)
+    --pprint(ai_container_size)
+    ai_container_scale = gui.get_scale(ai_container_node)
+
+    ai_out_pos = vmath.vector3(ai_container_start_pos.x, ai_container_start_pos.y + (ai_container_size.y * ai_container_scale.y), ai_container_start_pos.z)
+    gui.set_position(ai_container_node, ai_out_pos)
 
     local act_node = nil
     local act_count = nil
@@ -139,9 +226,9 @@ function manager:init()
     for i = 1, s.act_count do
         act_node = gui.get_node("act_" .. i)
         act_count = gui.get_node("act_" .. i .. "_count")
-        
+
         pos = gui.get_position(act_node)
-        screen_pos = gui.get_screen_position(act_node)
+        screen_pos = gui.get_position(act_node)
         temp_table = {
             node = act_node,
             count_txt = act_count,
@@ -166,6 +253,8 @@ function manager:input(action_id, action)
         toggle_play()
     elseif gui.pick_node(speed_btn, action_pos.x, action_pos.y) and action.pressed then
         toggle_speed()
+    elseif gui.pick_node(replay_btn, action_pos.x, action_pos.y) and action.pressed then
+        gs.fsm:replay()
     end
 
     -- Drag
@@ -196,6 +285,7 @@ function manager:input(action_id, action)
             end
         end
     elseif action.released and start_drag then
+        leave_act_btn()
         v.POINTER_POS = vmath.vector3(0, 0, 0)
         current_pop = 0
         start_drag = false

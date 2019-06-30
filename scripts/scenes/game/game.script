@@ -29,7 +29,6 @@ function init(self)
 	v.WALK_SPEED = s.walk_speed
 	v.FALL_SPEED = s.fall_speed
 	v.BULLET_SPEED = s.bullet_speed
-	
 
 	tiles:init()
 
@@ -37,6 +36,7 @@ function init(self)
 	if s.is_dev == false then
 		msg.post(s.scenes.Loading, "game_transition")
 	end
+	
 end
 
 function final(self)

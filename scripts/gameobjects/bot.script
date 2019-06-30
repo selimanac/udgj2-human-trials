@@ -1,6 +1,8 @@
 local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
+local audio = require("scripts.general.audio")
+
 
 go.property("direction", 1)
 go.property("id", 0)
@@ -8,6 +10,7 @@ go.property("id", 0)
 local set_position = go.set_position
 
 local function fire(self)
+	audio:play("laser_robot")
 	local bullet_pos = vmath.vector3(self.pos.x + 7, self.pos.y + 8, self.pos.z)
 	factory.create("#robot_bullet", bullet_pos, nil, {direction = self.direction})
 end
@@ -61,6 +64,7 @@ local function terminate(self)
 end
 
 local function fadeout(self)
+	
 	go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.3, 0, terminate)
 end
 
@@ -73,6 +77,7 @@ function on_message(self, message_id, message, sender)
 		fire(self)
 	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_BULLET then
 		-- print("Take Hit")
+		audio:play("robot_destroy")
 		self.is_active = false
 		sprite.play_flipbook("#sprite", hash("robot_die"), fadeout)
 	end

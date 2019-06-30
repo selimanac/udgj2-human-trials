@@ -8,8 +8,8 @@ profiles {
     os: OS_ID_GENERIC
     formats {
       format: TEXTURE_FORMAT_RGBA
-      compression_level: BEST
-      compression_type: COMPRESSION_TYPE_DEFAULT
+      compression_level: HIGH
+      compression_type: COMPRESSION_TYPE_WEBP_LOSSY
     }
     mipmaps: false
     max_texture_size: 0

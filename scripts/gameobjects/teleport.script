@@ -1,47 +1,40 @@
 local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
-
+local audio = require("scripts.general.audio")
 
 go.property("id", 0)
-
 
 local function teleport_in(self)
 	sprite.play_flipbook("#sprite", hash("man_teleport_idle"))
 	msg.post(human_url, "human_play", {act = "TELEPORT_IN", targets = self.target_ids})
-	--msg.post(v.LEVEL_OBJECTS[target_ids[1]].tile_go, "teleport_in")
 end
 
 local function teleport_out(self)
-	--msg.post(human_url, "human_play", {act = "TELEPORT_OUT", targets = target_ids})
+	audio:play("human_teleport_out")
 	msg.post(v.LEVEL_OBJECTS[self.target_ids[1]].tile_go, "teleport_in")
 end
 
 function init(self)
 	self.target_ids = {}
 	self.is_active = false
-	 print("Teleport ID: ", self.id)
 end
 
 function on_message(self, message_id, message, sender)
-
 	if message_id == hash("teleport_in") then
-		print("teleport_in")
 		self.is_active = false
 		sprite.play_flipbook("#sprite", hash("man_teleport_in"), teleport_in)
 	end
 
 	if message_id == h.OBJ_ACTIVE then
-		 print("Teleport Activated")
 		self.is_active = true
 	end
 
 	if self.is_active == false then
-		print("Teleport FALSE")
 		return
 	end
 
 	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
-		print("teleport_out")
+		
 		human_url = utils:human_url(message.other_id)
 		self.target_ids = utils:kick_links(self.id)
 		msg.post(human_url, "human_play", {act = "TELEPORT", targets = self.target_ids})

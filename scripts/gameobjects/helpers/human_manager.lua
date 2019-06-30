@@ -2,17 +2,54 @@ local v = require("scripts.general.vars")
 local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 local machine = require("scripts.libs.statemachine")
+local audio = require("scripts.general.audio")
 
 human = {}
 
 local human_container = "container"
 local human_sprite = "#sprite"
-
+local sfx = {
+    human_walk = "/sfx#human_walk",
+    human_walk_fast = "/sfx#human_walk_fast"
+}
 -- Funcs
 local set_position = go.set_position
 
+local function play_walk_sound(walk, gain)
+    sound.play(walk, {gain = gain})
+end
+
+local function stop_walk_sound(walk)
+    sound.stop(walk)
+end
+
 local function draw_line(from, to)
     msg.post("@render:", "draw_line", {start_point = from, end_point = to, color = vmath.vector4(1, 0, 0, 1)})
+end
+
+function human:toggle_walk_sound(self)
+    if self.is_fast == true then
+      --  print("Walk Slow")
+        if self.fsm.current == "walking" then
+            play_walk_sound(sfx.human_walk, 0.3)
+            stop_walk_sound(sfx.human_walk_fast)
+        end
+        self.is_fast = false
+    else
+      --  print("Walk Fast")
+        if self.fsm.current == "walking" then
+            play_walk_sound(sfx.human_walk_fast, 1)
+            stop_walk_sound(sfx.human_walk)
+        end
+        self.is_fast = true
+    end
+end
+
+function human:disable(self)
+    msg.post("#c_left", "disable")
+    msg.post("#c_right", "disable")
+    msg.post("#chuman", "disable")
+    msg.post("#sprite", "disable")
 end
 
 function human:check_queue(self, id)
@@ -44,6 +81,14 @@ local function remove_from_queue(self, id)
         end
     end ]]
     -- p-- print(self.queue)
+end
+
+local function pause_complete(self)
+    self.fsm:walk({self = self})
+
+    if self.queue_id > 0 then
+        remove_from_queue(self, self.queue_id)
+    end
 end
 
 function human:dispatch_queue(self)
@@ -107,13 +152,16 @@ local function change_direction(self)
         sprite.set_hflip(human_sprite, true)
         msg.post("#c_left", "enable")
         msg.post("#c_right", "disable")
+        
     else
         self.direction = s.direction.RIGHT
         sprite.set_hflip(human_sprite, false)
         msg.post("#c_left", "disable")
         msg.post("#c_right", "enable")
+        
     end
-    self.raycats_x = self.raycats_x * self.direction
+    self.raycats_x = self.raycats_x * -1
+ 
 end
 
 local function dying_complete()
@@ -129,6 +177,7 @@ local function sprite_anim_complete(self)
 end
 
 local function clone_init_complete(self)
+   -- print("CLONE DIRECTION: ", self.direction )
     self.fsm:walk()
 end
 
@@ -165,6 +214,7 @@ local function jump_complete(self)
 end
 
 local function jump_air_complete(self)
+    audio:play("human_land")
     change_anim(hash("man_jump_ground"), jump_complete)
 end
 
@@ -188,6 +238,7 @@ local function fall_start_complete(self)
 end
 
 local function start_fall(self)
+    audio:play("human_jump_start")
     change_anim(hash("man_fall_start"), nil)
     go.animate(human_container, "position", go.PLAYBACK_ONCE_FORWARD, vmath.vector3(self.human_pos.x + (10 * self.direction), self.human_pos.y + 10, self.human_pos.z), go.EASING_OUTSINE, 0.4, 0, fall_start_complete)
 
@@ -198,11 +249,6 @@ end
 --  State funcs
 
 local function on_state_change(self, event, from, to, event_msg)
-    -- print("on_state_change")
-    -- print("event: " , event)
-    -- print("from", from)
-    -- print("to", to)
-    -- p-- print("event_msg", event_msg)
 end
 
 local function on_enter_standing(self, event, from, to, event_msg)
@@ -211,20 +257,31 @@ local function on_enter_standing(self, event, from, to, event_msg)
 end
 
 local function on_enter_walking(self, event, from, to, event_msg)
-    -- print("on_enter_walking")
+    -- audio:play("human_walk", 0.2)
+
+    if self.is_fast == true then
+       -- print("Walk Slow")
+        play_walk_sound(sfx.human_walk, 0.3)
+        stop_walk_sound(sfx.human_walk_fast)
+    else
+       --print("Walk FAST")
+        play_walk_sound(sfx.human_walk_fast, 1)
+        stop_walk_sound(sfx.human_walk)
+    end
+
     change_anim(s.anim.walk, nil)
 end
 
 local function on_leave_walking(self, event, from, to, event_msg)
-    -- print("on_leave_walking")
-    --change_anim(s.anim.idle, nil)
+    stop_walk_sound(sfx.human_walk)
+    stop_walk_sound(sfx.human_walk_fast)
 end
 
 local function on_enter_pushing(self, event, from, to, event_msg)
     -- print("on_enter_pushing")
     event_msg.self.msg_sender = event_msg.sender
     event_msg.self.msg_act = event_msg.act
-
+    audio:play("human_push")
     change_anim(s.anim.push, sprite_anim_complete)
 end
 
@@ -234,7 +291,7 @@ end
 
 local function on_enter_cloning(self, event, from, to, event_msg)
     -- print("on_enter_cloning")
-
+    audio:play("human_clone")
     event_msg.self.fsm:idle()
     human_clone(event_msg.self)
 end
@@ -246,6 +303,8 @@ local function on_enter_turning(self, event, from, to, event_msg)
 end
 
 local function on_enter_pausing(self, event, from, to, event_msg)
+    change_anim(hash("man_idle"), nil)
+    timer.delay(1, false, pause_complete)
     -- print("on_enter_pausing")
     -- Tamamlandığında gelecek
     --[[  if self.queue_id > 0 then
@@ -264,6 +323,7 @@ end
 
 local function on_enter_jumping(self, event, from, to, event_msg)
     -- print("on_enter_jumping")
+    audio:play("human_jump_start")
     start_jump(event_msg.self)
 end
 
@@ -272,13 +332,12 @@ local function on_enter_transfering(self, event, from, to, event_msg)
     event_msg.self.msg_sender = event_msg.sender
     event_msg.self.msg_act = event_msg.act
     if event_msg.self.msg_act == "TELEPORT" then
-        -- print("Start")
         local id = event_msg.targets[1]
         local g = v.LEVEL_OBJECTS[id].tile_go
-        pprint(v.LEVEL_OBJECTS[id].level)
 
         if v.LEVEL_OBJECTS[id].level > v.CURRENT_LEVEL then
             v.CURRENT_LEVEL = v.CURRENT_LEVEL + 1
+            msg.post(s.scenes.GameGUI, "init_anims")
             v.LEVEL_COUNTER = v.LEVEL_COUNTER + 1
             if v.LEVEL_COUNTER == 3 then
                 local cam_pos = go.get_position(h.CAMERA)
@@ -296,8 +355,9 @@ local function on_enter_transfering(self, event, from, to, event_msg)
         event_msg.self.human_pos_x = event_msg.self.human_pos.x
         set_position(event_msg.self.human_pos, human_container)
         msg.post(human_sprite, "disable")
+        audio:play("human_teleport_in")
     elseif event_msg.self.msg_act == "TELEPORT_IN" then
-        msg.post("#c_left", "disable")
+        msg.post("#c_left", "enable")
         msg.post("#c_right", "enable")
         msg.post("#chuman", "enable")
         msg.post(human_sprite, "enable")
@@ -307,7 +367,8 @@ end
 
 local function on_enter_dying(self, event, from, to, event_msg)
     -- print("on_enter_dying")
-
+    audio:play("human_death", 0.5)
+    audio:play("human_nutralised")
     if from == "falling" then
         self.human_pos = go.get_position(human_container)
         self.human_pos.y = self.human_pos.y - 5
@@ -325,7 +386,6 @@ function human:init(self, dir)
     self.direction = dir
     if self.is_clone == 1 then
         change_direction(self)
-    -- print("CLONE")
     end
     self.human_pos = go.get_position(human_container)
 

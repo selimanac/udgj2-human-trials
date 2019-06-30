@@ -1,12 +1,14 @@
 local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
+local audio = require("scripts.general.audio")
 
 go.property("direction", 1)
 
 local set_position = go.set_position
 
 function init(self)
+	audio:play("laser_human")
 	self.pos = go.get_position(".")
 	self.pos_x = self.pos.x
 	if self.direction == -1 then

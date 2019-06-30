@@ -1,11 +1,12 @@
 [project]
-title = Human Trials
+title = HumanTrials
 dependencies = https://github.com/britzl/defold-orthographic/archive/master.zip
-version = 0.1
+version = 0.5
 write_log = 0
+bundle_resources = /res
 
 [bootstrap]
-main_collection = /scenes/test.collectionc
+main_collection = /scenes/bootstrap.collectionc
 render = /orthographic/render/orthographic.renderc
 
 [input]
@@ -33,8 +34,9 @@ package = com.selimanac.humantrials
 gravity_y = 0.0
 debug = 0
 ray_cast_limit_3d = 0
-world_count = 1
+world_count = 3
 max_collisions = 16
+debug_alpha = 0.8
 
 [graphics]
 default_texture_min_filter = nearest
@@ -43,4 +45,7 @@ texture_profiles = /components/profiles/default.texture_profiles
 
 [ios]
 bundle_identifier = com.selimanac.humantrials
+
+[native_extension]
+app_manifest = /manifests/generated.appmanifest
 

@@ -6,6 +6,7 @@ local h = require("scripts.general.hashes")
 local s = require("scripts.general.settings")
 local machine = require("scripts.gameobjects.helpers.human_manager")
 local v = require("scripts.general.vars")
+local gs = require("scripts.general.game_state")
 
 function init(self)
 	self.msg_sender = nil
@@ -17,34 +18,33 @@ function init(self)
 	self.raycast_to = vmath.vector3(0, 0, 0)
 	self.raycats_x = 1
 	self.is_falling = false
-
+	self.is_fast = false
 	self.queue_id = 0
 
 	msg.post("#c_left", "disable")
 	msg.post("#c_right", "enable")
-
+	
+	--print("Baslangıc Pozisyonu:", self.initial_direction)
 	machine:init(self, self.initial_direction)
-	-- print("initial_direction", self.initial_direction)
-
-	--	self.fsm:idle()
-	--self.fsm:fall({self = self})
 
 	if self.is_clone == 1 then
 		-- print("INIT CLONE")
 		machine:init_clone(self)
 	end
 
-	-- print("HUMAN ID")
----	p-- print(self.id)
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+	v.HUMAN_COUNT = v.HUMAN_COUNT + 1
 end
 
 function update(self, dt)
 	human:update(self, dt)
+end
+
+local function gamereplay(self)
+	if v.HUMAN_COUNT == 0 then
+		gs.fsm:replay()
+	end
+
+	go.delete(self.temp_table)
 end
 
 function on_message(self, message_id, message, sender)
@@ -64,9 +64,19 @@ function on_message(self, message_id, message, sender)
 		self.fsm:die({self = self})
 	end
 
+	if message_id == hash("toggle_walk_sound") then
+		human:toggle_walk_sound(self)
+	elseif message_id == hash("the_end") then
+		gs.fsm:replay()
+	end
+
 	if message_id == h.HUMAN_PLAY then
 		if message.act == nil then
 			self.fsm:walk()
+		elseif message.act == "FENCE" then
+			if human:check_queue(self, s.act.PAUSE) then
+				self.fsm:pause()
+			end
 		elseif message.act == s.act.PUSH then
 			if human:check_queue(self, message.act) then
 				self.fsm:push({self = self, sender = sender, act = message.act})
@@ -78,6 +88,12 @@ function on_message(self, message_id, message, sender)
 		elseif message.act == "TELEPORT_IN" then
 			self.fsm:teleport({self = self, sender = sender, act = message.act, targets = message.targets})
 		elseif message.act == "BLOCK" then
+			if human:check_queue(self, nil) then
+				human:dispatch_queue(self)
+			end
+		elseif message.act == "DIE" then
+			self.fsm:die({self = self})
+		elseif message.act == "MINE" then
 			if human:check_queue(self, nil) then
 				human:dispatch_queue(self)
 			end
@@ -100,18 +116,23 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == h.HUMAN_QUEUE then
 		human:add_to_queue(self, message.act)
 	elseif message_id == h.REMOVE_HUMAN then
-		-- TODO
-		-- False yanlış
-		-- Clone ise silinecek. Clone değil ise check point
-		if self.is_clone == 0 then
-		--[[ 	for i = 1, #v.LEVEL_OBJECTS do
-				if v.LEVEL_OBJECTS[i].id == self.id then
-					table.remove(v.LEVEL_OBJECTS, i)
-					break
-				end
-			end ]]
-
-			go.delete(".")
+		for i = 1, #v.LEVEL_OBJECTS do
+			if v.LEVEL_OBJECTS[i].id == self.id then
+				v.LEVEL_OBJECTS[i].object_id = 0
+				break
+			end
 		end
+
+		human:disable(self)
+
+		v.HUMAN_COUNT = v.HUMAN_COUNT - 1
+		self.temp_table = {}
+		for i = 1, #v.LEVEL_OBJECTS do
+			if v.LEVEL_OBJECTS[i].id == self.id then
+				self.temp_table = v.LEVEL_OBJECTS[i].tile_go
+			end
+		end
+
+		timer.delay(1, false, gamereplay)
 	end
 end

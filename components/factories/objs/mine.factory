@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/mine.go"
+load_dynamically: false

@@ -1,0 +1,2 @@
+prototype: "/components/gameobjects/objs/fence.go"
+load_dynamically: false

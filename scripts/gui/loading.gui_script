@@ -3,11 +3,26 @@ local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 
 local function unload_scene()
+	msg.post(s.scenes.GameGUI, "init_anims")
 	msg.post(s.proxy, "unload_proxy", {scene = s.scenes.LoadingProxy})
 end
 
+local function load_music()
+	if s.game_music == 0 then
+		if s.is_music then
+			player.build_path("/Users/selimanac/Development/Defold/GameJam/Human-Trials/res/common/assets/") -- Set build path only for Defold Editor
+		end
+
+		s.game_music = player.load_music("music_1.xm") -- Load mod file and assign it is ID[int] 1-3
+	end
+	if player.is_music_playing(s.game_music) == false then
+		player.xm_volume(s.game_music, 1, 0.15)
+		player.play_music(s.game_music)
+	end
+end
+
 local function loading_transition(self)
-	gui.animate(self.logo_node, "position.y", s.display_height + 30, gui.EASING_INCIRC, 0.5, 0, nil, gui.PLAYBACK_ONCE_BACKWARD)
+	gui.animate(self.logo_node, "position.y", s.display_height + 30, gui.EASING_INCIRC, 0.5, 0, load_music, gui.PLAYBACK_ONCE_BACKWARD)
 	gui.animate(self.human_node, "color.w", 0, gui.EASING_LINEAR, 0.4, 0, nil, gui.PLAYBACK_ONCE_BACKWARD)
 end
 

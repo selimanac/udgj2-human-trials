@@ -1,20 +1,24 @@
 local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
+local audio = require("scripts.general.audio")
 
 go.property("obj_id", 0)
 go.property("id", 0)
 
-local function complete( self )
-	
+local function complete(self)
 	go.delete(".")
 end
 
 local function collect()
+	audio:play("human_pick")
 	go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.2, 0, complete)
 end
 
+local function on_complete(self)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, self.pos.y + 3, go.EASING_INBOUNCE, 0.7, 3, on_complete)
 
+end
 
 function init(self)
 	-- print("obj_id: ", self.obj_id)
@@ -25,12 +29,8 @@ function init(self)
 		end
 	end
 	self.pos = go.get_position(".")
-	go.animate(".", "position.y", go.PLAYBACK_LOOP_PINGPONG, self.pos.y + 5, go.EASING_INBOUNCE, 1, 0.2, on_complete)
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Remove this function if not needed
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_PINGPONG, self.pos.y + 3, go.EASING_INBOUNCE, 0.7, 3, on_complete)
+	
 end
 
 function on_message(self, message_id, message, sender)
@@ -39,14 +39,4 @@ function on_message(self, message_id, message, sender)
 		msg.post(s.scenes.GameGUI, "collect_act", {id = self.obj_id})
 		collect()
 	end
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Remove this function if not needed
 end

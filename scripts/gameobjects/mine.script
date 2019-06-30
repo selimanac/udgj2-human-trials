@@ -1,0 +1,46 @@
+local h = require("scripts.general.hashes")
+local s = require("scripts.general.settings")
+local utils = require("scripts.libs.utils")
+local audio = require("scripts.general.audio")
+
+go.property("is_active", 0)
+go.property("id", 0)
+
+function init(self)
+	self.hitcount = 1
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN and self.is_active == 0 then
+		self.human_url = utils:human_url(message.other_id)
+		if self.hitcount == 1 then
+			msg.post(self.human_url, "human_play", {act = "MINE"})
+			self.hitcount = self.hitcount + 1
+		elseif self.hitcount == 2 then
+			self.is_active = 1
+			audio:play("act_explode")
+			sprite.play_flipbook("#sprite", hash("mine_explode"))
+			msg.post(self.human_url, "human_play", {act = "DIE"})
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

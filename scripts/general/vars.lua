@@ -10,5 +10,7 @@ return {
     FALL_SPEED = 0,
     BULLET_SPEED = 0,
     OBJ_INDEX = 0,
-    LEVEL_COUNTER = 1
+    LEVEL_COUNTER = 1,
+    HUMAN_COUNT = 0,
+    HUMANS = {}
 }

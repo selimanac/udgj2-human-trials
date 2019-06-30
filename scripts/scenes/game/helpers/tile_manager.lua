@@ -72,6 +72,7 @@ function tiles:init()
                         temp_pos.z = temp_tile.offset.z
                         temp_pos = utils:get_tile_position(temp_pos, temp_tile.offset, tilemap_offset)
                         tile_go = dispatch_object(temp_tile, temp_pos, temp_tile.id, v.OBJ_INDEX)
+
                         temp_table = {
                             id = v.OBJ_INDEX,
                             object_id = temp_tile.id,
@@ -101,6 +102,7 @@ function tiles:init()
                     temp_pos.z = temp_tile.offset.z
                     temp_pos = utils:get_tile_position(temp_pos, temp_tile.offset, tilemap_offset)
                     tile_go = dispatch_object(temp_tile, temp_pos)
+
                     temp_table = {
                         id = i,
                         object_id = temp_tile.id,
