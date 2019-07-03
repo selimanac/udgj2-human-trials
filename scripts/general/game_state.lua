@@ -30,7 +30,6 @@ local function on_enter_initilasing(self, event, from, to, event_msg)
 end
 
 local function on_leave_initilasing()
-   
 end
 
 local function on_enter_gameplay(self, event, from, to, event_msg)
@@ -39,7 +38,6 @@ local function on_enter_gameplay(self, event, from, to, event_msg)
 end
 
 local function on_leave_gameplay(self, event, from, to, event_msg)
-   
 end
 
 local function on_enter_gamepause(self, event, from, to, event_msg)
@@ -48,7 +46,6 @@ local function on_enter_gamepause(self, event, from, to, event_msg)
 end
 
 local function on_before_gamereplay(self, event, from, to, event_msg)
-   
     msg.post(s.proxy, "unload_proxy", {scene = s.scenes.GameProxy})
 
     v.LEVEL_OBJECTS = {}
@@ -65,8 +62,6 @@ local function on_before_gamereplay(self, event, from, to, event_msg)
 end
 
 local function on_enter_gamereplay(self, event, from, to, event_msg)
-    
-
     gs.fsm:launch()
 end
 
