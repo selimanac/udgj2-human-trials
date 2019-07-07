@@ -4,6 +4,7 @@ dependencies = https://github.com/britzl/defold-orthographic/archive/master.zip
 version = 0.5
 write_log = 0
 bundle_resources = /res
+bundle_exclude_resources = /raw
 
 [bootstrap]
 main_collection = /scenes/bootstrap.collectionc

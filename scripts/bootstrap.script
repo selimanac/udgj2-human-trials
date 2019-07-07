@@ -31,7 +31,6 @@ function on_message(self, message_id, message, sender)
 		if sender == msg.url(s.scenes.LoadingProxy) then
 			enable_scene(sender)
 		elseif sender == msg.url(s.scenes.GameProxy) then
-			--msg.post(sender, "init")
 			self.gamescene = sender
 			enable_scene(sender)
 		end

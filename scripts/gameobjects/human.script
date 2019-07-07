@@ -23,12 +23,10 @@ function init(self)
 
 	msg.post("#c_left", "disable")
 	msg.post("#c_right", "enable")
-	
-	--print("Baslangıc Pozisyonu:", self.initial_direction)
+
 	machine:init(self, self.initial_direction)
 
 	if self.is_clone == 1 then
-		-- print("INIT CLONE")
 		machine:init_clone(self)
 	end
 
@@ -48,25 +46,25 @@ local function gamereplay(self)
 end
 
 function on_message(self, message_id, message, sender)
+
+	-- Wall & Bullet
 	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_WALL then
 		machine:turn(self)
 	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_BULLET then
-		-- print("DIE human")
 		self.fsm:die({self = self})
 	end
 
+	-- GROUND
 	if message_id == h.RAY_CAST_MISSED and self.fsm.current ~= "falling" then
 		self.fsm:fall({self = self})
-	end
-
-	if message_id == h.RAY_CAST_RESPONSE and self.is_falling then
+	elseif message_id == h.RAY_CAST_RESPONSE and self.is_falling then
 		self.is_falling = false
 		self.fsm:die({self = self})
 	end
 
-	if message_id == hash("toggle_walk_sound") then
+	if message_id == h.TOGGLE_WALK_SOUND then
 		human:toggle_walk_sound(self)
-	elseif message_id == hash("the_end") then
+	elseif message_id == h.THE_END then
 		gs.fsm:replay()
 	end
 

@@ -29,14 +29,12 @@ end
 
 function human:toggle_walk_sound(self)
     if self.is_fast == true then
-      --  print("Walk Slow")
         if self.fsm.current == "walking" then
             play_walk_sound(sfx.human_walk, 0.3)
             stop_walk_sound(sfx.human_walk_fast)
         end
         self.is_fast = false
     else
-      --  print("Walk Fast")
         if self.fsm.current == "walking" then
             play_walk_sound(sfx.human_walk_fast, 1)
             stop_walk_sound(sfx.human_walk)
@@ -75,12 +73,6 @@ end
 
 local function remove_from_queue(self, id)
     table.remove(self.queue, self.queue_id)
-    --[[ for i = 1, #self.queue do
-        if self.queue[i] == id then
-            table.remove(self.queue, i)
-        end
-    end ]]
-    -- p-- print(self.queue)
 end
 
 local function pause_complete(self)
@@ -142,7 +134,6 @@ local function human_clone(self)
     }
 
     table.insert(v.LEVEL_OBJECTS, temp_table)
-    -- print("CLONE COMPLETE... WALK")
     self.fsm:walk()
 end
 
@@ -152,16 +143,13 @@ local function change_direction(self)
         sprite.set_hflip(human_sprite, true)
         msg.post("#c_left", "enable")
         msg.post("#c_right", "disable")
-        
     else
         self.direction = s.direction.RIGHT
         sprite.set_hflip(human_sprite, false)
         msg.post("#c_left", "disable")
         msg.post("#c_right", "enable")
-        
     end
     self.raycats_x = self.raycats_x * -1
- 
 end
 
 local function dying_complete()
@@ -177,7 +165,6 @@ local function sprite_anim_complete(self)
 end
 
 local function clone_init_complete(self)
-   -- print("CLONE DIRECTION: ", self.direction )
     self.fsm:walk()
 end
 
@@ -195,7 +182,6 @@ local function draw_back_complete(self)
 end
 
 local function draw_anim_complete(self)
-    -- print("Fire")
     local pos = vmath.vector3()
     pos.x = self.human_pos.x + (8 * self.direction)
     pos.y = self.human_pos.y + 3
@@ -246,25 +232,19 @@ local function start_fall(self)
     self.human_pos.y = self.human_pos.y + 10
 end
 
+-- *****************
 --  State funcs
-
-local function on_state_change(self, event, from, to, event_msg)
-end
-
+-- *****************
 local function on_enter_standing(self, event, from, to, event_msg)
-    -- print("on_enter_standing")
+
     change_anim(s.anim.idle, nil)
 end
 
 local function on_enter_walking(self, event, from, to, event_msg)
-    -- audio:play("human_walk", 0.2)
-
     if self.is_fast == true then
-       -- print("Walk Slow")
         play_walk_sound(sfx.human_walk, 0.3)
         stop_walk_sound(sfx.human_walk_fast)
     else
-       --print("Walk FAST")
         play_walk_sound(sfx.human_walk_fast, 1)
         stop_walk_sound(sfx.human_walk)
     end
@@ -278,26 +258,19 @@ local function on_leave_walking(self, event, from, to, event_msg)
 end
 
 local function on_enter_pushing(self, event, from, to, event_msg)
-    -- print("on_enter_pushing")
     event_msg.self.msg_sender = event_msg.sender
     event_msg.self.msg_act = event_msg.act
     audio:play("human_push")
     change_anim(s.anim.push, sprite_anim_complete)
 end
 
-local function on_enter_hiding(self, event, from, to, event_msg)
-    -- print("on_enter_hiding")
-end
-
 local function on_enter_cloning(self, event, from, to, event_msg)
-    -- print("on_enter_cloning")
     audio:play("human_clone")
     event_msg.self.fsm:idle()
     human_clone(event_msg.self)
 end
 
 local function on_enter_turning(self, event, from, to, event_msg)
-    -- print("on_enter_turning")
     change_direction(event_msg.self)
     event_msg.self.fsm:walk()
 end
@@ -305,30 +278,18 @@ end
 local function on_enter_pausing(self, event, from, to, event_msg)
     change_anim(hash("man_idle"), nil)
     timer.delay(1, false, pause_complete)
-    -- print("on_enter_pausing")
-    -- Tamamlandığında gelecek
-    --[[  if self.queue_id > 0 then
-        remove_from_queue(self, self.queue_id)
-    end ]]
 end
 
 local function on_enter_firing(self, event, from, to, event_msg)
-    -- print("on_enter_firing")
     change_anim(s.anim.draw, draw_anim_complete)
-    -- Tamamlandığında gelecek
-    --[[  if self.queue_id > 0 then
-        remove_from_queue(self, self.queue_id)
-    end ]]
 end
 
 local function on_enter_jumping(self, event, from, to, event_msg)
-    -- print("on_enter_jumping")
     audio:play("human_jump_start")
     start_jump(event_msg.self)
 end
 
 local function on_enter_transfering(self, event, from, to, event_msg)
-    -- print("on_enter_transfering")
     event_msg.self.msg_sender = event_msg.sender
     event_msg.self.msg_act = event_msg.act
     if event_msg.self.msg_act == "TELEPORT" then
@@ -366,7 +327,6 @@ local function on_enter_transfering(self, event, from, to, event_msg)
 end
 
 local function on_enter_dying(self, event, from, to, event_msg)
-    -- print("on_enter_dying")
     audio:play("human_death", 0.5)
     audio:play("human_nutralised")
     if from == "falling" then
@@ -378,7 +338,6 @@ local function on_enter_dying(self, event, from, to, event_msg)
 end
 
 local function on_enter_falling(self, event, from, to, event_msg)
-    -- print("on_enter_falling")
     start_fall(event_msg.self)
 end
 
@@ -410,13 +369,11 @@ function human:init(self, dir)
                 {name = "fall", from = "walking", to = "falling"}
             },
             callbacks = {
-                on_state_change = on_state_change,
                 on_enter_standing = on_enter_standing,
                 on_enter_walking = on_enter_walking,
                 on_leave_walking = on_leave_walking,
                 on_enter_pushing = on_enter_pushing,
                 on_enter_pausing = on_enter_pausing,
-                on_enter_hiding = on_enter_hiding,
                 on_enter_cloning = on_enter_cloning,
                 on_enter_turning = on_enter_turning,
                 on_enter_firing = on_enter_firing,
@@ -453,7 +410,7 @@ function human:update(self, dt)
         self.raycast_to.x = self.human_pos.x + self.raycats_x
         self.raycast_to.y = self.human_pos.y - 20
 
-        physics.raycast_async(self.human_pos, self.raycast_to, {h.C_GROUND})
+        physics.raycast_async(self.human_pos, self.raycast_to, {h.C_GROUND}) -- Cause a problem on pause
     end
 
     if s.is_debug_physic then

@@ -26,5 +26,8 @@ return {
     RAY_CAST_RESPONSE = hash("ray_cast_response"),
     REMOVE_HUMAN = hash("remove_human"),
     COLLECT = hash("collect_act"),
-    DECEREASE_ACT = hash("decerease_act")
+    DECEREASE_ACT = hash("decerease_act"),
+    TELEPORT_IN =  hash("teleport_in"),
+    TOGGLE_WALK_SOUND = hash("toggle_walk_sound"),
+    THE_END = hash("the_end")
 }

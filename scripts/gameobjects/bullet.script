@@ -17,10 +17,9 @@ function init(self)
 end
 
 function update(self, dt)
-	if v.GAME_PAUSED  then
-        return
+	if v.GAME_PAUSED then
+		return
 	end
-	
 	self.pos_x = self.pos_x + ((v.BULLET_SPEED * dt) * self.direction)
 	self.pos.x = self.pos_x
 	set_position(self.pos, ".")
@@ -31,15 +30,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-
-	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_WALL then
-		-- print("Hit wall")
-		go.delete(".")
-	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_ACT then
-		-- print("Hit ACT")
-		go.delete(".")
-	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
-		-- print("Hit HUMAN")
+	if message_id == h.TRIGGER and message.enter and (message.other_group == h.C_WALL or message.other_group == h.C_ACT or message.other_group == h.C_HUMAN) then
 		go.delete(".")
 	end
 end

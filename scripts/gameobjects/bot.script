@@ -3,7 +3,6 @@ local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
 local audio = require("scripts.general.audio")
 
-
 go.property("direction", 1)
 go.property("id", 0)
 
@@ -54,29 +53,19 @@ function update(self, dt)
 end
 
 local function terminate(self)
-	--[[ for i = 1, #v.LEVEL_OBJECTS do
-		if v.LEVEL_OBJECTS[i].id == self.id then
-			table.remove(v.LEVEL_OBJECTS, i)
-			break
-		end
-	end ]]
 	go.delete(".")
 end
 
 local function fadeout(self)
-	
 	go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.3, 0, terminate)
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_WALL then
-		-- print("HitWall")
 		change_direction(self)
 	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
-	
 		fire(self)
 	elseif message_id == h.TRIGGER and message.enter and message.other_group == h.C_BULLET then
-		-- print("Take Hit")
 		audio:play("robot_destroy")
 		self.is_active = false
 		sprite.play_flipbook("#sprite", hash("robot_die"), fadeout)

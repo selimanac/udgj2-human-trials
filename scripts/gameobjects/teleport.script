@@ -1,11 +1,12 @@
 local h = require("scripts.general.hashes")
 local v = require("scripts.general.vars")
 local audio = require("scripts.general.audio")
+local s = require("scripts.general.settings")
 
 go.property("id", 0)
 
 local function teleport_in(self)
-	sprite.play_flipbook("#sprite", hash("man_teleport_idle"))
+	sprite.play_flipbook("#sprite",  s.anim.teleport_idle)
 	msg.post(human_url, "human_play", {act = "TELEPORT_IN", targets = self.target_ids})
 end
 
@@ -20,12 +21,10 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("teleport_in") then
+	if message_id == h.TELEPORT_IN then
 		self.is_active = false
-		sprite.play_flipbook("#sprite", hash("man_teleport_in"), teleport_in)
-	end
-
-	if message_id == h.OBJ_ACTIVE then
+		sprite.play_flipbook("#sprite", s.anim.teleport_in, teleport_in)
+	elseif message_id == h.OBJ_ACTIVE then
 		self.is_active = true
 	end
 
@@ -34,11 +33,10 @@ function on_message(self, message_id, message, sender)
 	end
 
 	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
-		
 		human_url = utils:human_url(message.other_id)
 		self.target_ids = utils:kick_links(self.id)
 		msg.post(human_url, "human_play", {act = "TELEPORT", targets = self.target_ids})
-		sprite.play_flipbook("#sprite", hash("man_teleport_out"), teleport_out)
+		sprite.play_flipbook("#sprite", s.anim.teleport_out, teleport_out)
 		self.is_active = false
 	end
 end

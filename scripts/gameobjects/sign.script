@@ -45,10 +45,8 @@ function on_message(self, message_id, message, sender)
 		self.human_url = utils:human_url(message.other_id)
 		msg.post(self.human_url, s.acts[self.act_id].job, {act = self.act_id})
 		remove_act(self)
-	end
-	if message_id == h.ADD_ACT then
+	elseif message_id == h.ADD_ACT then
 		set_act(self, message.act_id)
-	--	p-- print(message.act_id)
 		msg.post(s.scenes.GameGUI, "decerease_act", {id = message.act_id})
 	end
 end

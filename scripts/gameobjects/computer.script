@@ -2,10 +2,6 @@ local h = require("scripts.general.hashes")
 local s = require("scripts.general.settings")
 local utils = require("scripts.libs.utils")
 
-function init(self)
-	-- Add initialization code here
-	-- Remove this function if not needed
-end
 
 local function callback(self)
 	msg.post(self.human_url, "the_end")

@@ -3,6 +3,7 @@ local manager = require("scripts.gui.helpers.gui_manager")
 local s = require("scripts.general.settings")
 local h = require("scripts.general.hashes")
 local utils = require("scripts.libs.utils")
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	manager:init()
@@ -14,7 +15,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == h.DECEREASE_ACT then
 		manager:decerease(message.id)
 	elseif message_id == hash("init_anims") then
-		 manager:init_anim(self)
+		manager:init_anim(self)
 	end
 end
 

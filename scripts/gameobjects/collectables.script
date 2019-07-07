@@ -21,8 +21,6 @@ local function on_complete(self)
 end
 
 function init(self)
-	-- print("obj_id: ", self.obj_id)
-	-- print("self.id: ", self.id)
 	for i = 1, s.act_count do
 		if s.acts[i].id == self.obj_id then
 			sprite.play_flipbook("#sprite", s.acts[i].anim)
@@ -35,7 +33,6 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
-		-- print("COLLECT")
 		msg.post(s.scenes.GameGUI, "collect_act", {id = self.obj_id})
 		collect()
 	end

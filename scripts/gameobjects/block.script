@@ -6,11 +6,8 @@ go.property("is_active", 0)
 go.property("id", 0)
 
 function on_message(self, message_id, message, sender)
-	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN  then
-		
+	if message_id == h.TRIGGER and message.enter and message.other_group == h.C_HUMAN then
 		self.human_url = utils:human_url(message.other_id)
 		msg.post(self.human_url, "human_play", {act = "BLOCK"})
-	--	self.human_url = utils:human_url(message.other_id)
-	--	msg.post(self.human_url, "human_play", {act = s.act.PUSH})
 	end
 end

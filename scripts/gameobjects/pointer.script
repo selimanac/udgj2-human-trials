@@ -1,13 +1,9 @@
 local h = require("scripts.general.hashes")
-local s = require("scripts.general.settings")
 local v = require("scripts.general.vars")
 local camera = require "orthographic.camera"
 
 local pos = vmath.vector3()
 local set_position = go.set_position
-
-function init(self)
-end
 
 function update(self, dt)
 	if v.IS_POINTER_DRAG == false then
@@ -19,11 +15,8 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message.other_group == h.C_SIGN and message.enter == true then
-		-- print("Enter")
-	--	p-- print(message)
 		v.CURRENT_SIGN = message.other_id
 	elseif message.enter == false then
-		-- print("out")
 		v.CURRENT_SIGN = nil
 	end
 end

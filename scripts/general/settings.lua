@@ -205,7 +205,7 @@ setting.tile_objects = {
     factory_type = 1
   },
   {
-    -- FENCE
+    -- Computer
     id = 36,
     factory = "/factories#computer",
     offset = vmath.vector3(0, 0, 0.1),
@@ -253,11 +253,11 @@ setting.anim = {
   jump_air = hash("man_jump_air"),
   jump_ground = hash("man_jump_ground"),
   push = hash("man_push"),
-  teleport_out = "man_teleport_out",
-  teleport_in = "man_teleport_in",
-  teleport_idle = "man_teleport_idle",
-  die = "man_die",
-  clone = "man_clone"
+  teleport_out = hash("man_teleport_out"),
+  teleport_in = hash("man_teleport_in"),
+  teleport_idle = hash("man_teleport_idle"),
+  die = hash("man_die"),
+  clone = hash("man_clone")
 }
 
 setting.speedup = 2

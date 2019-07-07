@@ -1,13 +1,12 @@
 local s = require("scripts.general.settings")
 local utils = require("scripts.libs.utils")
 local v = require("scripts.general.vars")
-local level = require("scripts.general.levels")
+local levels = require("scripts.general.levels")
 
 tiles = {}
 
 local wall_height = 2
 local wall_start = 3
-local level = 0
 local tilemap_offset = vmath.vector3(0, 0, 0)
 
 local level_count = 1
@@ -41,6 +40,7 @@ local function dispatch_object(tile, pos, obj_id, index)
     else
         obj = factories[1](tile.factory, pos, nil, {id = index, obj_id = obj_id})
     end
+
     return obj
 end
 
@@ -58,6 +58,7 @@ function tiles:init()
         if tile_y > wall_start then
             update_level()
         end
+        -- Objects
         for tile_x = 1, w do
             if tile_y > wall_start then
                 tile_id = tilemap.get_tile("/tilemap#level_1", "objects", tile_x, tile_y)
@@ -93,6 +94,7 @@ function tiles:init()
                 end
             end
 
+            -- Walls
             tile_id = tilemap.get_tile("/tilemap#level_1", "walls", tile_x, tile_y)
             for i = 1, s.walls_count do
                 temp_tile = s.tile_walls[i]
@@ -118,13 +120,9 @@ function tiles:init()
         end
     end
 
-    -- print("Level adet: ", level_count)
-    -- LEvellar için çevir
+    -- Level stages
     for l = 1, #levels.relations do
-        -- Level içindeki ilişkiler için çevir
         for items = 1, #levels.relations[l] do
-            -- p-- print(levels.relations[l][items].from)
-            -- To'nun karşılığını bul
             for obj = 1, #v.LEVEL_OBJECTS do
                 if v.LEVEL_OBJECTS[obj].tile_id == levels.relations[l][items].from then
                     for to = 1, #levels.relations[l][items].to do
@@ -134,7 +132,6 @@ function tiles:init()
                                     id = v.LEVEL_OBJECTS[to_obj].id,
                                     object_id = v.LEVEL_OBJECTS[to_obj].object_id
                                 }
-
                                 table.insert(v.LEVEL_OBJECTS[obj].links.to, temp_table)
                             end
                         end
@@ -147,7 +144,6 @@ function tiles:init()
             end
         end
     end
-    -- p-- print(v.LEVEL_OBJECTS)
 end
 
 return tiles

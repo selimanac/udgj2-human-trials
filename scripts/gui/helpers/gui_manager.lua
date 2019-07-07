@@ -99,7 +99,7 @@ end
 local function toggle_speed()
     for i = 1, #v.LEVEL_OBJECTS do
         if v.LEVEL_OBJECTS[i].object_id == 4 then
-           -- pprint(v.LEVEL_OBJECTS[i].tile_go.url)
+            -- pprint(v.LEVEL_OBJECTS[i].tile_go.url)
             msg.post(v.LEVEL_OBJECTS[i].tile_go.url, "toggle_walk_sound")
         end
     end
@@ -150,7 +150,7 @@ local function enter_act_btn(act)
     current_pop = act.id
 
     local pos = vmath.vector3(act.screen_pos.x, pop_position.y, pop_position.z)
-    
+
     gui.set_position(pop_node, pos)
     gui.set_text(pop_text_node, s.acts[act.id].name)
 
@@ -180,15 +180,6 @@ function manager:collect(id)
             gui.set_text(acts[i].count_txt, acts[i].count)
         end
     end
-
-    --[[     for i=1,s.act_count do
-        if s.acts[i].id == id then
-            -- p-- print(s.acts[i])
-            s.acts[i].count = s.acts[i].count+1
-            
-            gui.set_text(s.acts[i].count_txt, s.acts[i].count)
-        end
-    end ]]
 end
 
 function manager:init()
@@ -206,7 +197,6 @@ function manager:init()
     ai_txt_node = gui.get_node("ai_txt")
     ai_container_start_pos = gui.get_position(ai_container_node)
     ai_container_size = gui.get_size(ai_container_node)
-    --pprint(ai_container_size)
     ai_container_scale = gui.get_scale(ai_container_node)
 
     ai_out_pos = vmath.vector3(ai_container_start_pos.x, ai_container_start_pos.y + (ai_container_size.y * ai_container_scale.y), ai_container_start_pos.z)
@@ -217,12 +207,7 @@ function manager:init()
     local pos = vmath.vector3()
     local count = 0
     local temp_table = {}
-    --[[
 
-    TODO
-    Level a gore ACT ve adetler  gelecek 
-
- ]]
     for i = 1, s.act_count do
         act_node = gui.get_node("act_" .. i)
         act_count = gui.get_node("act_" .. i .. "_count")
@@ -274,6 +259,7 @@ function manager:input(action_id, action)
             end
         end
     end
+
     -- Drag check
     if action_id == h.CLICK and action.pressed and start_drag == false then
         for i = 1, s.act_count do

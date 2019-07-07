@@ -1,19 +1,16 @@
-# Welcome to Defold
+# Human Trials
 
-This project was created from the "desktop" project template. This means that the settings in ["game.project"](defold://open?path=/game.project) have been changed to be suitable for a desktop game:
+You can play on itch.io: https://selimanac.itch.io/human-trials
 
-- The screen size is set to 1280x720
-- Projection is set to Fixed Fit
-- macOS and Windows icons are set
-- Mouse clicks are bound to action "click"
-- A simple script in a game object is set up to receive and react to input
+Made for [UDGJ #2](https://itch.io/jam/unofficial-defold-game-jam-2)  
+Made with [Defold](www.defold.com)
 
-[Build and run](defold://build) to see it in action. You can of course alter these settings to fit your needs.
+**Credits & Dependencies**
 
-Check out [the documentation pages](https://defold.com/learn) for examples, tutorials, manuals and API docs.
+- Defold [Orthographic Camera](https://github.com/britzl/defold-orthographic) by [Björn Ritzl](https://twitter.com/bjornritzl)
+- [Defold Mod Player](https://github.com/selimanac/defold-modplayer)
+- Mod Music [Catch 22](https://modarchive.org/index.php?request=view_by_moduleid&query=35387) by Distance & [Lackluster](https://twitter.com/esaruoho)
+- Various SFX from [freesound.org](https://freesound.org/) 
 
-If you run into trouble, help is available in [our forum](https://forum.defold.com).
-
-Happy Defolding!
-
----
+**Contact**  
+Twitter: [twitter.com/selimanac](https://twitter.com/selimanac)

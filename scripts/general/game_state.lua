@@ -22,26 +22,16 @@ local function on_enter_loading(self, event, from, to, event_msg)
 end
 
 local function on_enter_initilasing(self, event, from, to, event_msg)
-    -- print("on_game_initilasing")
     msg.post(s.scenes.GameProxy, "acquire_input_focus")
     v.GAME_PAUSED = true
-
-    -- p-- print(v.LEVEL_OBJECTS)
-end
-
-local function on_leave_initilasing()
 end
 
 local function on_enter_gameplay(self, event, from, to, event_msg)
-    -- print("on_game_gameplay")
     v.GAME_PAUSED = false
 end
 
-local function on_leave_gameplay(self, event, from, to, event_msg)
-end
 
 local function on_enter_gamepause(self, event, from, to, event_msg)
-    -- print("on_game_gamepause")
     v.GAME_PAUSED = true
 end
 
@@ -82,9 +72,7 @@ function gs:init()
                 on_enter_launching = on_enter_launching,
                 on_enter_loading = on_enter_loading,
                 on_enter_initilasing = on_enter_initilasing,
-                on_leave_initilasing = on_leave_initilasing,
                 on_enter_gameplay = on_enter_gameplay,
-                on_leave_gameplay = on_leave_gameplay,
                 on_enter_gamepause = on_enter_gamepause,
                 on_before_replay = on_before_gamereplay,
                 on_enter_gamereplay = on_enter_gamereplay
