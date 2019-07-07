@@ -3,7 +3,7 @@
 You can play on itch.io: https://selimanac.itch.io/human-trials
 
 Made for [UDGJ #2](https://itch.io/jam/unofficial-defold-game-jam-2)  
-Made with [Defold](www.defold.com)
+Made with [Defold](http://www.defold.com)
 
 **Credits & Dependencies**
 
